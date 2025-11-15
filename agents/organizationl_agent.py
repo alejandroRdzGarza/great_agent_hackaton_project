@@ -68,8 +68,12 @@ class OrganizationalAgent(BaseAgent):
 
         # Generate LLM response
         prompt = f"Agent {self.name}, you received this message:\n{message.content}\nRespond appropriately."
-        response = self.call_model(prompt)
+        
+        # Pass thread_id from the message
+        thread_id = getattr(message, "thread_id", None)
+        response = self.call_model(prompt, thread_id=thread_id)
 
-        # Send response back
-        hub.send_message(self, message.sender, response)
+        # Send response back, preserve the thread_id
+        hub.send_message(self, message.sender, response, task_id=thread_id)
+
 

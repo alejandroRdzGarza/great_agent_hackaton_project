@@ -1,9 +1,20 @@
 # org/tasks.py
 import uuid
 from datetime import datetime, timezone
+from dataclasses import dataclass
+
+@dataclass
+class InsuranceClaim:
+    claim_id: str
+    claimant_name: str
+    claim_type: str
+    claim_amount: float
+    description: str
+    status: str = "Pending"
+
 
 class Task:
-    def __init__(self, description: str, assigned_agent=None, priority: int = 1):
+    def __init__(self, description: str, assigned_agent=None, priority: int = 1, claim=None):
         self.id = str(uuid.uuid4())
         self.description = description
         self.assigned_agent = assigned_agent
@@ -13,6 +24,7 @@ class Task:
         self.priority = priority
         self.dependencies = []
         self.output = None
+        self.claim = claim
 
     def assign_agent(self, agent):
         self.assigned_agent = agent
